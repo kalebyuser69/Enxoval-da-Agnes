@@ -5,7 +5,9 @@ const cors = require("cors");
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3001' // Substitua pelo domínio correto do seu frontend
+}));
 
 // Conectar ao MongoDB
 mongoose.connect(process.env.MONGO_URI, {

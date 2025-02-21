@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kalnia&display=swap');
+
+
+
+/* Estilos globais */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 30px;
+    background-image: linear-gradient(100deg, #f7f4f5, #d9e0dc);
+
+}
+
+
+/* Formatação do título principal */
+h1 {
+    font-family: "Fleur De Leah", serif;
+    /* Negrito */
+    font-size: 10rem;
+    /* Tamanho da fonte */
+    text-align: center;
+    /* Centraliza o texto */
+    margin-bottom: 1.5rem;
+    /* Espaçamento inferior */
+    color: #12190C;
+    /* Cor do texto */
+    margin-top: 30px;
+
+}
+
+
+
+h3 {
+    font-family: "Kalnia", serif;
+    font-weight: bold;
+    /* Negrito */
+    font-size: 2.5rem;
+    /* Tamanho da fonte */
+    color: #8f4e4e;
+    /* Cor do texto */
+    margin-bottom: 1rem;
+    /* Espaçamento inferior */
+    text-align: center;
+    /* Alinha o texto à */
+
+}
+
+.background-images {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+
+        url('https://i.pinimg.com/736x/04/57/1c/04571ceb74135171c8276c5af55aff95.jpg');
+
+    background-size: 100% auto;
+
+    z-index: -1;
+    opacity: 0.2;
+    /* Reduz a opacidade das imagens */
+}
+
+/* Contêiner principal */
+.container {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* Centraliza o carrossel */
+    overflow: hidden;
+    box-sizing: border-box;
+
+    height: auto;
+    display: flex;
+    overflow: hidden;
+    /* Esconde os itens que estão fora da área visível */
+    width: 100%;
+    flex: 0 0 100%;
+    /* Cada item ocupa 100% da largura por padrão (1 item visível) */
+    box-sizing: border-box;
+
+}
+
+.carousel-item {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* Cada item ocupa toda a largura do carrossel */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    display: flex;
+    opacity: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Remove fundo e borda dos botões */
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none !important;
+    /* Garante que o fundo seja removido */
+    border: none !important;
+    cursor: pointer;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    /* Pequeno padding para facilitar o clique */
+}
+
+/* Remove qualquer fundo ou sombra das setas */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-image: none !important;
+    /* Remove a imagem padrão do Bootstrap */
+    width: 80px;
+    /* Define o tamanho da seta */
+    height: 40px;
+    display: inline-block;
+}
+
+/* Adiciona um ícone manualmente */
+.carousel-control-prev::after,
+.carousel-control-next::after {
+    content: '❮';
+    /* Seta esquerda */
+    font-size: 80px;
+    color: rgb(20, 17, 17);
+    /* Define a cor da seta */
+}
+
+.carousel-control-next::after {
+    content: '❯';
+    /* Seta direita */
+}
+
+
+
+.carousel-control-prev {
+    left: 5px;
+}
+
+.carousel-control-next {
+    right: 50px;
+}
+
+
+/* Estilo dos produtos */
+.produto {
+    display: flex;
+    font-family: "Kalnia", serif;
+    font-size: 20px;
+    color: #12190C;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    background: #d7a8a288;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 5px 60px 60px 60px;
+    /* Margem superior menor (20px), laterais (60px), inferior maior (60px) */
+    text-align: center;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.produto-nome {
+    font-size: 27px;
+    font-family: "Kalnia", serif;
+
+    /* Tamanho maior apenas para o nome */
+    font-weight: bold;
+    /* Deixa o nome mais destacado */
+    color: #12190C;
+    /* Pode mudar a cor para destacar */
+}
+
+
+.produto img {
+    width: 300px;
+    height: auto;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.produto.ativo {
+    opacity: 1;
+    background-color: #86b488;
+}
+
+.produto.selecionado {
+    background-color: #D7A8A2 !important;
+    box-shadow: 0 4px 8px rgba(3, 0, 0, 0.288) !important;
+}
+
+/* Classe para esconder o produto esgotado */
+.produto-esgotado {
+    opacity: 0;
+    /* Faz o produto sumir suavemente */
+    pointer-events: none;
+    /* Impede interações */
+    transition: opacity 0.5s ease-out;
+    /* Animação suave */
+    display: none;
+    /* Remove completamente o produto */
+}
+
+
+/* Indicadores do carrossel */
+.carousel-indicators button {
+    background-color: #267cc7a6;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.carousel-indicators .active {
+    background-color: #007bff;
+
+}
+
+/* Estilo da checkbox (com o texto de "Presentear" ou "Esgotado") */
+.checkbox {
+    display: none;
+    /* Esconde a checkbox padrão */
+}
+
+.checkbox+label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 45px;
+    background-color: #d4a0c275;
+    border: 2px solid #14070062;
+    border-radius: 30px;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    color: #2e0320;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+
+/* A link que aparece quando o produto está marcado */
+.checkbox+label .produto-link {
+    position: absolute;
+    bottom: -25px;
+    /* Coloca o link logo abaixo da checkbox */
+    font-size: 12px;
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.checkbox+label .produto-link:hover {
+    text-decoration: underline;
+}
+
+/* Mudança visual para quando o produto é esgotado */
+input[type="checkbox"].produto-esgotado:checked {
+    background-color: #fdf9f9;
+    font-size: 10px;
+    /* Mantém o fundo cinza */
+    color: transparent;
+    /* Remove o check visível */
+}
+
+
+/* Tela de carregamento */
+#loading-screen {
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(226, 195, 218);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Animação de carregamento (círculo girando) */
+.loader {
+    border: 8px solid #eca4d4;
+    /* Cor do fundo */
+    border-top: 8px solid #e9dae1;
+    /* Cor da animação */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+
+@media (max-width: 768px) {
+    .produto {
+        width: 250px;
+    }
+
+    /* Ajusta o tamanho e posicionamento das setas */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 30px;
+        /* Reduz largura do botão da seta */
+        height: 30px;
+        /* Reduz altura do botão da seta */
+        padding: 0;
+        /* Remove espaçamentos internos */
+    }
+
+    .carousel-control-prev {
+        left: 0px !important;
+        /* Move mais para a esquerda */
+    }
+
+    .carousel-control-next {
+        right: 10px !important;
+        /* Move mais para a direita */
+    }
+
+    /* Reduz o tamanho do ícone da seta */
+    .carousel-control-prev::after,
+    .carousel-control-next::after {
+        font-size: 40px !important;
+        /* Diminui o tamanho da seta */
+    }
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    h3 {
+        font-size: 1.7rem;
+    }
+
+    .produto {
+        width: 200px;
+        font-size: 17px;
+
+    }
+
+    .produto img {
+        width: 200px;
+    }
+
+    .produto-nome {
+        font-size: 21px;
+    }
+
+}
+
+
+/* Estilo do botão dentro do footer */
+.galeria {
+    font-family: "Kalnia", serif;
+    color: #8f4e4e;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Garantir que o botão fique fixo no final da página */
+.galeria {
+    position: absolute;
+    bottom: 0;
+    /* Fixa o botão na parte inferior da página */
+    left: 50%;
+    /* Centraliza o botão horizontalmente */
+    transform: translateX(-50%);
+    /* Ajusta a posição para centralizar */
+}
+
+
+
+/* Efeito ao passar o mouse */
+.galeria:hover {
+    background-color: #beb3b5;
+}

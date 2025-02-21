@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Fleur+De+Leah&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Emilys+Candy&display=swap');
+
+
+
+.background-images {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+
+        url('https://i.pinimg.com/736x/04/57/1c/04571ceb74135171c8276c5af55aff95.jpg');
+
+    background-size: 100% auto;
+
+    z-index: -1;
+    opacity: 0.2;
+}
+
+/* Resetando alguns estilos padrões */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilizando o corpo da página */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    background-image: linear-gradient(100deg, #f7f4f5, #d9e0dc)
+}
+
+/* Estilo para o título principal */
+h1 {
+    font-family: "Kalnia", serif;
+    text-align: center;
+    font-size: 28px;
+    color: #8f4e4e;
+    margin-top: 15px;
+    /* Ajusta o espaço superior */
+    margin-bottom: 5px;
+}
+
+
+
+/* Estilo especial para a frase "A magia da vida começa aqui" */
+.destaque {
+    font-family: "Fleur De Leah", serif;
+    text-align: center;
+    font-size: 58px;
+    color: #0a090a;
+    /* Azul destaque */
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Estilo do restante da mensagem */
+.mensagem-secundaria {
+    font-family: "Kalnia", serif;
+    text-align: center;
+    font-size: 22px;
+    color: #050305;
+    margin-bottom: 50px;
+}
+
+
+
+/* Estiliza o contêiner dos trimestres */
+.trimestres {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    /* Espaço entre as caixas */
+    margin-top: 20px;
+}
+
+/* Cada caixa clicável */
+.trimestre-box {
+    display: flex;
+    flex-direction: column;
+    /* Organiza os elementos em coluna (título em cima, imagem embaixo) */
+    align-items: center;
+    width: 400px;
+    /* Largura da caixa */
+    height: 400px;
+    /* Altura total da caixa */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    /* Remove o sublinhado do link */
+    background-color: #d7a8a288;
+    /* Fundo claro para destacar o título */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estiliza o título */
+.trimestre-titulo {
+    font-family: "Kalnia", serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: #0c0808;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Ajusta a imagem dentro da caixa */
+.trimestre-box img {
+    width: 100%;
+    height: 100%;
+    /* Faz a imagem ocupar apenas a parte de baixo */
+    object-fit: cover;
+    /* Mantém a proporção sem distorcer */
+    border-radius: 0 0 10px 10px;
+    /* Arredonda apenas a parte inferior */
+}
+
+/* Efeito ao passar o mouse */
+.trimestre-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+/* trimestre1.html */
+h4 {
+    font-family: "Kalnia", serif;
+    font-size: 36px;
+    color: #8f4e4e;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gallery img {
+    width: 400px;
+    height: auto;
+    border-radius: 15px;
+
+}
+
+h5 {
+    font-family: "Kalnia", serif;
+    font-size: 36px;
+    color: #8f4e4e;
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* Estilizando a div que contém os vídeos */
+.video {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    /* Espaçamento entre os vídeos */
+    flex-wrap: wrap;
+    /* Para que os vídeos se ajustem em telas menores */
+}
+
+/* Estilizando cada vídeo */
+.video video {
+    width: 100%;
+    /* Faz o vídeo ocupar toda a largura do contêiner */
+    max-width: 500px;
+    /* Limita a largura máxima do vídeo */
+    border-radius: 8px;
+
+}
+
+/* Ajuste para telas menores (até 600px, típico de celulares) */
+@media (max-width: 600px) {
+    .trimestres {
+        flex-direction: column;
+        /* Organiza as caixas em coluna */
+        align-items: center;
+        /* Centraliza as caixas */
+    }
+
+    .trimestre-box {
+        width: 90%;
+        /* Faz a caixa ocupar quase toda a largura da tela */
+        max-width: 300px;
+        /* Define um limite para não ficar muito grande */
+    }
+}

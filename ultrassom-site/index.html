@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultrassom</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <p class="mensagem">
+        <span class="destaque">A magia da vida começa aqui!</span>  
+        <p>
+        <h1>Galeria de Ultrassom da Agnes</h1>
+        <div class="mensagem-secundaria">
+            Acompanhe o crescimento da Agnes a cada trimestre!
+        </div>
+
+        <div class="background-images"></div>
+
+        <nav class="trimestres">
+            <a href="trimestre1.html" class="trimestre-box">
+                <span class="trimestre-titulo">1° Trimestre</span>
+                <img src="https://i.postimg.cc/90VdqgKS/7-0.png" alt="1° Trimestre">
+            </a>
+            <a href="trimestre2.html" class="trimestre-box">
+                <span class="trimestre-titulo">2° Trimestre</span>
+                <img src="media/carregar.avif" alt="2° Trimestre">
+            </a>
+            <a href="trimestre3.html" class="trimestre-box">
+                <span class="trimestre-titulo">3° Trimestre</span>
+                <img src="media/carregar.avif" alt="3° Trimestre">
+            </a>
+        </nav>
+
+        <script>
+            // Espera o carregamento completo da página
+    window.addEventListener("load", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+        loadingScreen.style.display = "none"; // Esconde a tela de carregamento
+    });
+        </script>
+
+<style>
+    /* Tela de carregamento */
+#loading-screen {
+    position: fixed;
+    text-align: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(226, 195, 218);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Animação de carregamento (círculo girando) */
+.loader {
+    border: 8px solid #eca4d4;
+    /* Cor do fundo */
+    border-top: 8px solid #e9dae1;
+    /* Cor da animação */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+}
+</style>
+        
+</body>
+</html>
+

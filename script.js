@@ -231,6 +231,54 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+document.addEventListener("DOMContentLoaded", carregarProdutos);  // Chama a função assim que o conteúdo da página for carregado
+
+function carregarProdutos() {
+    fetch("http://localhost:3000/produtos")  // Endpoint para recuperar os produtos
+        .then(response => response.json())    // Converte a resposta em JSON
+        .then(produtos => {
+            const lista = document.getElementById("lista-produtos");  // ID do elemento onde os produtos serão listados
+            lista.innerHTML = "";  // Limpa a lista existente
+
+            produtos.forEach(produto => {
+                const item = document.createElement("div");
+                item.classList.add("produto");
+
+                // Cria o checkbox para marcar/desmarcar o produto
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = produto.marcado;  // Marca o checkbox conforme o estado salvo no banco
+                checkbox.onchange = () => marcarProduto(produto.nome, checkbox.checked);  // Atualiza o status no banco ao mudar
+
+                item.innerHTML = `
+          <img src="${produto.imagem}" alt="${produto.nome}">
+          <p>${produto.nome} - ${produto.preco}</p>
+        `;
+                item.appendChild(checkbox);
+
+                lista.appendChild(item);  // Adiciona o produto à lista
+            });
+        })
+        .catch(error => console.error("Erro ao carregar produtos:", error));
+}
+
+function marcarProduto(nome, marcado) {
+    fetch("http://localhost:3000/marcar-produto", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nome, marcado }),  // Envia o nome e o status de marcado
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.mensagem); // Exibe a resposta do servidor
+            carregarProdutos(); // Atualiza a lista de produtos
+        })
+        .catch(error => console.error("Erro ao marcar produto:", error));
+}
+
+
 // Evento do botão de reset
 document.getElementById("reset-button").addEventListener("click", function () {
     // Limpa o localStorage

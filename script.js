@@ -197,3 +197,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+// Evento do botão de reset
+document.getElementById("reset-button").addEventListener("click", function () {
+    // Limpa o localStorage
+    localStorage.clear();
+
+    // Atualiza a interface do usuário para refletir as quantidades resetadas
+    const checkboxes = document.querySelectorAll('.checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false; // Desmarca todas as checkboxes
+        checkbox.disabled = false; // Habilita todas as checkboxes
+    });
+
+    // Observa mudanças na quantidade dos produtos
+    document.querySelectorAll(".produto").forEach(produto => {
+        const quantidadeSpan = produto.querySelector(".quantidade"); // Supõe que a quantidade está em um elemento com classe "quantidade"
+        const checkbox = produto.querySelector("input[type='checkbox']");
+
+        if (quantidadeSpan && checkbox) {
+            // Atualiza o estado da checkbox com base na quantidade
+            const novaQuantidade = parseInt(quantidadeSpan.textContent.split(": ")[1], 10); // Extrai a quantidade de "Faltam: X"
+            atualizarCheckbox(checkbox, novaQuantidade);
+        }
+    });
+});

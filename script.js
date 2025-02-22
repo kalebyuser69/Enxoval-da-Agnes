@@ -89,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     item.classList.add("active");
                 }
 
-                // Configurando o produto
                 const produtoDiv = document.createElement("div");
                 produtoDiv.classList.add("produto");
 
@@ -102,114 +101,82 @@ document.addEventListener("DOMContentLoaded", function () {
                 img.alt = produto.nome;
                 produtoDiv.appendChild(img);
 
-                // Quantidade do produto
                 const quantidadeProduto = document.createElement("p");
                 quantidadeProduto.textContent = `${produto.preco} - Faltam: ${produto.quantidade}`;
                 produtoDiv.appendChild(quantidadeProduto);
 
-                // Recuperar a quantidade do localStorage ao carregar a página
+                // Armazena a quantidade inicial no localStorage
                 const storedQuantity = localStorage.getItem(produto.nome);
                 if (storedQuantity) {
-                    produto.quantidade = parseInt(storedQuantity, 10); // Corrigido para base 10
+                    produto.quantidade = parseInt(storedQuantity, 10);
                     quantidadeProduto.textContent = `Faltam: ${produto.quantidade}`;
                 }
 
-                // Checkbox para marcar como "Escolhido"
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.classList.add("checkbox");
                 checkbox.id = `checkbox-${produto.nome}`;
-                checkbox.setAttribute("data-product", produto.nome);  // Associando o nome do produto à checkbox
+                checkbox.setAttribute("data-product", produto.nome);
                 produtoDiv.appendChild(checkbox);
 
-                // Adiciona um label para a checkbox
                 const label = document.createElement("label");
                 label.setAttribute("for", checkbox.id);
 
-                // Adiciona "Presentear" ou "Esgotado"
+                // Atualiza o texto conforme a quantidade
                 if (produto.quantidade > 0) {
-                    label.textContent = "Presentear"; // Se há estoque
-                    checkbox.disabled = false; // Habilita a checkbox
-                    produtoDiv.style.backgroundColor = ""; // Deixa o fundo sem cor
+                    label.textContent = "Presentear";
+                    checkbox.disabled = false;
+                    produtoDiv.style.backgroundColor = "";
                 } else {
-                    label.textContent = "Limite atingido, Obrigado por participar 😊​"; // Se não há estoque
-                    checkbox.disabled = true; // Desabilita a checkbox
-                    produtoDiv.style.backgroundColor = "#b37878"; // Fundo vermelho para produtos esgotados
+                    label.textContent = "Limite atingido, Obrigado por participar 😊​";
+                    checkbox.disabled = true;
+                    produtoDiv.style.backgroundColor = "#b37878";
                 }
 
                 produtoDiv.appendChild(label);
 
-                // Verifica se a checkbox deve estar marcada ao carregar a página
-                if (produto.quantidade === 0) { // Se a quantidade for 0
-                    checkbox.checked = true; // Marca a checkbox
-                    checkbox.disabled = true; // Desabilita a checkbox
-                    produtoDiv.style.backgroundColor = "#b37878"; // Muda a cor da caixa do produto para vermelho
-                    label.textContent = "Limite atingido! Obrigado por participar 😊​"; // Garante que "Esgotado" seja mostrado
+                // Marca como esgotado se a quantidade for 0
+                if (produto.quantidade === 0) {
+                    checkbox.checked = true;
+                    checkbox.disabled = true;
+                    produtoDiv.style.backgroundColor = "#b37878";
+                    label.textContent = "Limite atingido! Obrigado por participar 😊​";
                 }
 
-                // Evento para checkbox
                 checkbox.addEventListener("change", function () {
                     const telefone = localStorage.getItem("usuarioTelefone");
                     const productName = this.getAttribute("data-product");
                     const produto = produtos.find(p => p.nome === this.getAttribute("data-product"));
 
-                    // Pergunta ao usuário antes de prosseguir
                     const confirmacao = confirm(`Você será redirecionado para o site de compra e não poderá desmarcar o produto.\n\nTEM CERTEZA QUE DESEJA SELECIONAR "${productName}"?`);
 
                     if (!confirmacao) {
-                        this.checked = !this.checked; // Volta ao estado anterior se o usuário cancelar
+                        this.checked = !this.checked;
                         return;
                     }
 
-                    // Se a checkbox for marcada, redireciona para o link do produto
                     if (this.checked && produto) {
-                        window.open(produto.link, "_blank"); // Abre o link em nova aba
+                        window.open(produto.link, "_blank");
                     }
 
-
-
-                    // Caso a checkbox esteja marcada (usuário marca manualmente)
                     if (this.checked) {
-                        // Verifica se ainda há quantidade disponível
                         if (produto.quantidade > 0) {
-                            // Reduz a quantidade
                             produto.quantidade--;
                             quantidadeProduto.textContent = `Faltam: ${produto.quantidade}`;
-                            localStorage.setItem(produto.nome, produto.quantidade); // Salva a nova quantidade no localStorage
-
-
-                            // Função para atualizar a checkbox e outros detalhes do produto
-                            function atualizarCheckbox(checkbox, quantidade, produto) {
-                                if (quantidade === 0) {
-                                    checkbox.checked = true;
-                                    checkbox.disabled = true;
-                                } else {
-                                    checkbox.disabled = false;
-                                    // Você pode adicionar algum comportamento visual para indicar que o produto ainda está disponível
-                                    produtoDiv.style.backgroundColor = ""; // Reseta a cor de fundo para o normal
-                                    produtoDiv.innerHTML = `<strong>${produto.nome}</strong>`; // Restaura o nome do produto
-                                }
-                            }
-
-                            // Atualiza a checkbox imediatamente
-                            atualizarCheckbox(this, produto.quantidade);
-
+                            localStorage.setItem(produto.nome, produto.quantidade);
                         } else {
-                            // Se quantidade for 0, mantém a checkbox marcada e desativada
-                            this.checked = true; // Garante que fique marcada
-                            this.disabled = true; // Desabilita a checkbox
-
+                            this.checked = true;
+                            this.disabled = true;
                         }
                     }
                 });
 
                 item.appendChild(produtoDiv);
                 carrosselInner.appendChild(item);
-            })
+            });
 
             carrossel.appendChild(carrosselInner);
 
-            // Controles do carrossel
             const prev = document.createElement("button");
             prev.classList.add("carousel-control-prev");
             prev.innerHTML = `<span class="carousel-control-prev-icon"></span>`;
@@ -228,79 +195,5 @@ document.addEventListener("DOMContentLoaded", function () {
             categoriaCol.appendChild(carrossel);
             listaProdutos.appendChild(categoriaCol);
         }
-    });
-
-
-    document.addEventListener("DOMContentLoaded", carregarProdutos);  // Chama a função assim que o conteúdo da página for carregado
-
-    function carregarProdutos() {
-        fetch("http://localhost:3000/produtos")  // Endpoint para recuperar os produtos
-            .then(response => response.json())    // Converte a resposta em JSON
-            .then(produtos => {
-                const lista = document.getElementById("lista-produtos");  // ID do elemento onde os produtos serão listados
-                lista.innerHTML = "";  // Limpa a lista existente
-
-                produtos.forEach(produto => {
-                    const item = document.createElement("div");
-                    item.classList.add("produto");
-
-                    // Cria o checkbox para marcar/desmarcar o produto
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "checkbox";
-                    checkbox.checked = produto.marcado;  // Marca o checkbox conforme o estado salvo no banco
-                    checkbox.onchange = () => marcarProduto(produto.nome, checkbox.checked);  // Atualiza o status no banco ao mudar
-
-                    item.innerHTML = `
-          <img src="${produto.imagem}" alt="${produto.nome}">
-          <p>${produto.nome} - ${produto.preco}</p>
-        `;
-                    item.appendChild(checkbox);
-
-                    lista.appendChild(item);  // Adiciona o produto à lista
-                });
-            })
-            .catch(error => console.error("Erro ao carregar produtos:", error));
-    }
-
-    function marcarProduto(nome, marcado) {
-        fetch("http://localhost:3000/marcar-produto", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ nome, marcado }),  // Envia o nome e o status de marcado
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.mensagem); // Exibe a resposta do servidor
-                carregarProdutos(); // Atualiza a lista de produtos
-            })
-            .catch(error => console.error("Erro ao marcar produto:", error));
-    }
-
-
-    // Evento do botão de reset
-    document.getElementById("reset-button").addEventListener("click", function () {
-        // Limpa o localStorage
-        localStorage.clear();
-
-        // Atualiza a interface do usuário para refletir as quantidades resetadas
-        const checkboxes = document.querySelectorAll('.checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = false; // Desmarca todas as checkboxes
-            checkbox.disabled = false; // Habilita todas as checkboxes
-        });
-
-        // Observa mudanças na quantidade dos produtos
-        document.querySelectorAll(".produto").forEach(produto => {
-            const quantidadeSpan = produto.querySelector(".quantidade"); // Supõe que a quantidade está em um elemento com classe "quantidade"
-            const checkbox = produto.querySelector("input[type='checkbox']");
-
-            if (quantidadeSpan && checkbox) {
-                // Atualiza o estado da checkbox com base na quantidade
-                const novaQuantidade = parseInt(quantidadeSpan.textContent.split(": ")[1], 10); // Extrai a quantidade de "Faltam: X"
-                atualizarCheckbox(checkbox, novaQuantidade);
-            }
-        });
     });
 });

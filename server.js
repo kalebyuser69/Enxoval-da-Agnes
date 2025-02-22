@@ -1,59 +1,78 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
+require('dotenv').config(); // Para armazenar credenciais de forma segura
 
 const app = express();
-app.use(express.json());
-app.use(cors({
-    origin: 'http://localhost:3001' // Substitua pelo domínio correto do seu frontend
+const port = 5000;
+
+// Servir arquivos estáticos da pasta public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// Definir uma rota padrão para servir a página inicial
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Conectar ao MongoDB Atlas
+const mongoURI = process.env.MONGO_URI || "mongodb+srv://kalebynog:56LbS7OxqE12PMyo@cluster0.jpuff.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('✅ Conectado ao MongoDB Atlas');
+}).catch((err) => {
+    console.error('❌ Erro ao conectar ao MongoDB:', err);
+});
+
+// Modelo de Produto
+const Produto = mongoose.model('Produto', new mongoose.Schema({
+    nome: String,
+    preco: String,
+    imagem: String,
+    quantidade: Number,
+    marcado: Boolean, // Marcação do produto
 }));
 
-// Conectar ao MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.once("open", () => console.log("MongoDB conectado!"));
-db.on("error", (err) => console.error("Erro na conexão:", err));
-
-// Iniciar servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
-
-const Produto = require("./models/Produto"); // Importa o modelo
-
-// Endpoint para marcar/desmarcar produto
-app.post("/marcar-produto", async (req, res) => {
-    const { nome, marcado } = req.body;
-
+// Rota para recuperar os produtos
+app.get('/api/produtos', async (req, res) => {
     try {
-        // Atualiza o produto no banco de dados
-        const produto = await Produto.findOneAndUpdate(
-            { nome },  // Procurar o produto pelo nome
-            { marcado },  // Atualiza o campo "marcado" com o valor enviado
-            { new: true }  // Retorna o documento atualizado
-        );
-
-        if (!produto) {
-            return res.status(404).json({ mensagem: "Produto não encontrado!" });
-        }
-
-        res.status(200).json({ mensagem: "Produto atualizado com sucesso!" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensagem: "Erro ao atualizar produto." });
+        const produtos = await Produto.find();
+        res.json(produtos);
+    } catch (err) {
+        res.status(500).send('Erro ao recuperar produtos');
     }
 });
-// Endpoint para recuperar todos os produtos
-app.get("/produtos", async (req, res) => {
-    try {
-        const produtos = await Produto.find();  // Recupera todos os produtos no banco de dados
-        res.status(200).json(produtos);  // Retorna os produtos para o frontend
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ mensagem: "Erro ao carregar produtos." });
+
+// Rota para salvar a marcação de um produto
+app.post('/api/marcar-produto', async (req, res) => {
+    const { produtoNome, marcado } = req.body;
+
+    // Busca o produto no banco
+    let produto = await Produto.findOne({ nome: produtoNome });
+
+    if (!produto) {
+        // Se não encontrar, cria um novo produto
+        produto = new Produto({ nome: produtoNome, marcado: marcado, quantidade: 10, preco: "R$ 50,00", imagem: "caminho-da-imagem.jpg" });
+    } else {
+        // Atualiza a marcação
+        produto.marcado = marcado;
     }
+
+    await produto.save();
+    res.status(200).send('Marcações atualizadas');
+});
+
+// Iniciar o servidor após conectar ao banco
+mongoose.connection.once('open', () => {
+    app.listen(port, () => {
+        console.log(`🚀 Servidor rodando na porta ${port}`);
+    });
 });
